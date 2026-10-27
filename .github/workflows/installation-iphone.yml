@@ -31,6 +31,14 @@ jobs:
           node-version: '22'
       - name: Extraire le projet
         run: unzip -q medora-livraison.zip -d "$RUNNER_TEMP/medora-source"
+      - name: Vérifier et extraire les contenus complémentaires
+        run: |
+          MEDORA_SOURCE_ROOT="$RUNNER_TEMP/medora-source"
+          if [ -f "$MEDORA_SOURCE_ROOT/medora/delivery-files.json" ]; then
+            python3 "$MEDORA_SOURCE_ROOT/medora/docs/iphone/extract-engine-parts.py" \
+              --source-root "$MEDORA_SOURCE_ROOT" \
+              --archive-root "$GITHUB_WORKSPACE"
+          fi
       - name: Lire la configuration Pages
         id: pages
         uses: actions/configure-pages@v5
